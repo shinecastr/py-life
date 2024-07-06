@@ -1,11 +1,14 @@
 import numpy as np
 from copy import copy
-from os import popen, system
 from time import sleep
+import curses
+from curses import wrapper
 
+curses.initscr()
+curses.curs_set(False)
 a = [-1, 0, 1]
-rows = int(popen("stty size").read().split(" ")[0]) - 2
-cols = int(popen("stty size").read().split(" ")[1]) - 1
+rows = curses.LINES
+cols = curses.COLS
 board = np.zeros((rows, cols))
 swap = copy(board) #make two 2d arrays the size of the terminal window
 
@@ -41,17 +44,16 @@ def getNeighbors(row, col): #returns how many neighboring cells are alive
                 n_neighbors+=board[row+i][col+j]
     return n_neighbors
 
-def printBoard(game_speed):
-    system("clear")
+def main(stdscr):
+    stdscr.clear()
     for i in range(rows):
         for j in range(cols):
             if board[i][j] == 1:
-                print("#", end="")
-            else:
-                print(" ", end="")
-        print()
-    sleep(game_speed)
+                stdscr.addstr(i, j, "#")
 
+    stdscr.refresh()
+    sleep(0.1)
+    step()
 #set living cells here
 
 board[0][2] = 1
@@ -61,5 +63,4 @@ board[2][1] = 1
 board[2][2] = 1
 
 while 1:
-    printBoard(0.1)
-    step()
+    wrapper(main)
