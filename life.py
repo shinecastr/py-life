@@ -12,7 +12,6 @@ cols = curses.COLS
 board = np.zeros((rows, cols))
 swap = copy(board) #make two 2d arrays the size of the terminal window
 
-
 def step(): #stores the next generation into the swap array and writes into the board
     for i  in range(rows):
         for j in range(cols): #iterate over the indecies of the 2D array
